@@ -31,7 +31,7 @@ bool hasEdulerianPath(int n, vector<int> &in, vector<int> &out) {
 int findStartNode(int n, vector<int> &in, vector<int> &out) {
 	int start = 0;
 	for(int i=0;i<n;i++) {
-		if(out[i] - in[i] == 1){
+		if(out[i] - in[i] == 1) {
 			return i;
 		}
 		if(out[i] > 0) start = i;
@@ -53,29 +53,37 @@ void getEulerianPath(int n, vector<int> *adj, vector<int> &in, vector<int> &out,
 	dfs(findStartNode(n, in, out), out, adj, path);
 }
 int main() {
-	int n, m, u, v;
-	cin >> n >> m;
-	vector<int> adj[n+1];
-	for(int i=0;i<m;i++) {
-		cin >> u >> v;
-		adj[u].push_back(v);
-	}
-	vector<int> in(n+1, 0);
-	vector<int> out(n+1, 0);
-	vector<int> path;
-	setupInOut(n, adj, in, out);
-	hasEdulerianPath(n, in, out);
 
-	getEulerianPath(n, adj, in, out, path);
-	 if (path.size() != edgeCount + 1) {
-	 	cout << "No Path exists";
-	 }
-	 if(path[0] == path[path.size() - 1]) {
-	 	cout << "There is cycle" << endl;
-	 }
-	for(int i=0;i<path.size();i++) {
-		cout << path[i] << " ";
+	int n, m, u, v, t;
+	while(1) {
+		cin >> n >> m;
+		if(n == 0 && m == 0) {
+			break;
+		}
+		vector<int> adj[n+1];
+		edgeCount = 0;
+		for(int i=0;i<m;i++) {
+			cin >> u >> v;
+			adj[u].push_back(v);
+		}
+		vector<int> in(n+1, 0);
+		vector<int> out(n+1, 0);
+		vector<int> path;
+		setupInOut(n, adj, in, out);
+		if(hasEdulerianPath(n, in, out)) {
+			getEulerianPath(n, adj, in, out, path);
+			if (path.size() != edgeCount + 1) {
+				cout << "Impossible" << endl;
+				return 0;
+			} else {
+				for(int i=0;i<path.size();i++) {
+					cout << path[i] << " ";
+				}
+				cout <<endl;
+			}
+		} else {
+			cout << "Impossible" << endl;
+		}
 	}
-	
 	return 0;
 }
