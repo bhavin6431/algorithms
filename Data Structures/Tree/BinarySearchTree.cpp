@@ -11,39 +11,58 @@ class Node {
 
 Node* root = NULL;
 
-void insertNode(int data) {
-	Node* newNode = new Node();
-	newNode->data = data;
-	if(root == NULL) {
-		root = newNode;
-	} else {
-		queue<Node*> q;
-		q.push(root);
-		while(!q.empty()) {
-			Node* node = q.front();
-			q.pop();
-			if(node -> left != NULL) {
-				q.push(node -> left);
-			} else {
-				node -> left = newNode; 
-				return;
-			}
-
-
-			if(node -> right != NULL) {
-				q.push(node -> right);
-			} else {
-				node -> right = newNode;
-				return;
-			}
-		}
+Node* insertNode(Node *node, int data) {
+	if(node == NULL) {
+		Node *newNode = new Node();
+		newNode -> data = data;
+		return newNode;
 	}
+
+	if( data < node -> data ) {
+		node -> left = insertNode(node -> left, data);
+	} else {
+		node -> right = insertNode(node -> right, data);
+	}
+	return node;
 }
 
-void deleteDeepestNode(Node* nodeToDelete) {
+Node* minValueNode(Node* node)
+{
+    Node* current = node;
+ 
+    while (current && current -> left != NULL)
+        current = current -> left;
+ 
+    return current;
 }
 
-void deleteNode(int data) {
+Node* deleteNode(Node* node, int data) {
+	if(node == NULL) {
+		return node;
+	}
+	if (data < node -> data) {
+        node -> left = deleteNode(node -> left, data);
+    } else if(data > node -> data) {
+		node -> right = deleteNode(node -> right, data);
+	} else {
+		if(node -> left == NULL && node -> right == NULL) {
+			return NULL;
+		} else if(node -> left == NULL) {
+			Node *tmp = node -> right;
+			free(node);
+			return tmp;
+		} else if(node -> right == NULL) {
+			Node *tmp = node -> left;
+			free(node);
+			return tmp;
+		}
+
+		Node* temp = minValueNode(node -> right);
+		node -> data = temp -> data;
+		node -> right = deleteNode(node -> right, temp -> data);
+
+	}
+	return node;
 }
 
 void inOrder(Node* node) {
@@ -79,31 +98,26 @@ int main() {
 	vector<int> vec(n);
 	for(int i=0;i<n;i++) {
 		cin >> vec[i];
-		insertNode(vec[i]);	
+		root = insertNode(root, vec[i]);	
 	}
-
 	inOrder(root);
 	cout << endl;
 	postOrder(root);
 	cout << endl;
 	preOrder(root);
 	cout << endl;
-
-	deleteNode(51);
+	root = deleteNode(root, 51);
 	inOrder(root);
 	cout << endl;
 
-	deleteNode(100);
+	root = deleteNode(root, 100);
 	inOrder(root);
 	cout << endl;
-
-	deleteNode(7);
+	root = deleteNode(root, 7);
 	inOrder(root);
 	cout << endl;
-
-	deleteNode(87);
+	root = deleteNode(root, 87);
 	inOrder(root);
 	cout << endl;
-
 	return 0;
 }
