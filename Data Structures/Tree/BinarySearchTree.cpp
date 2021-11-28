@@ -36,6 +36,18 @@ Node* minValueNode(Node* node)
     return current;
 }
 
+bool contains(int key) {
+	Node *  currNode = root;
+	while(currNode != NULL && currNode -> data != key) {
+		if(key > currNode -> data) {
+			currNode = currNode -> right;
+		} else {
+			currNode = currNode -> left;
+		}
+	}
+	return currNode != NULL && currNode -> data == key;
+}
+
 Node* deleteNode(Node* node, int data) {
 	if(node == NULL) {
 		return node;
@@ -119,5 +131,8 @@ int main() {
 	root = deleteNode(root, 87);
 	inOrder(root);
 	cout << endl;
+
+	cout << "Contains : " << contains(11);
+
 	return 0;
 }
