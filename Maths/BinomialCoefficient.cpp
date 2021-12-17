@@ -24,12 +24,17 @@ void moduleInverse(vector<long long> &inv) {
 }
 
 int main() {
+	int n, t, k;
 	vector<long long> inv(MAXN, 1);
 	vector<long long> factorial(MAXN, 1);
 	calculateFactorial(factorial);
 	moduleInverse(inv);
 	cout << factorial[5] << endl;
-	cout << inv[5] << endl;
-	cout << binomial_coefficient(factorial, inv, 4 , 2);
+	cout << inv[2] << endl;
+	cin >> t;
+	while(t--) {
+		cin >> n >> k;
+		cout << binomial_coefficient(factorial, inv, n , k) << endl;
+	}
 	return 0;
 }
